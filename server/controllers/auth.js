@@ -14,18 +14,12 @@ module.exports = {
         const existingPassword = 
         bcrypt.compareSync(password, users[i].passwordHash);
         if(existingPassword) {
-          let userObj = users[i];
+          let userObj = {...users[i]};
           delete userObj.passwordHash;
 			  	res.status(200).send(userObj);
-          console.log('successful login');
-         return;
-		  	}else{
-          res.status(400).send('Not a match');
-          console.log('not a match');
-          return;
         }
       }
-		}
+    }
 		res.status(400).send("User not found.")
 	},
 
