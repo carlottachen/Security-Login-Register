@@ -5,21 +5,18 @@ module.exports = {
 	login: (req, res) => {
 		console.log('Logging In User')
 		console.log(req.body)
-    //destructure
 		const { username, password } = req.body
-
-    //go through users array
 		for (let i = 0; i < users.length; i++) {
-			if (users[i].username === username){
-        const existingPassword = 
-        bcrypt.compareSync(password, users[i].passwordHash);
-        if(existingPassword) {
-          let userObj = {...users[i]};
-          delete userObj.passwordHash;
-			  	res.status(200).send(userObj);
-        }
-      }
-    }
+			if (users[i].username === username) {
+				const authenticated = bcrypt.compareSync(password, users[i].passwordHash)
+				if(authenticated){
+					let userToReturn = {...users[i]}
+					delete userToReturn.passwordHash
+					res.status(200).send(userToReturn)
+					return
+				}
+			}
+		}
 		res.status(400).send("User not found.")
 	},
 
